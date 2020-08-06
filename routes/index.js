@@ -1,9 +1,9 @@
-
+const tagsRouter = require('./tag.routes');
 
 const init = app => {
 
 
-    //app.use();
+    app.use(tagsRouter);
 
 };
 
