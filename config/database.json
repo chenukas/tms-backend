@@ -1,0 +1,6 @@
+{
+    "username":"root",
+    "password": "rootpassword",
+    "url": "mongodb+srv://<username>:<password>@tms-development.7rnvm.mongodb.net/tms?retryWrites=true&w=majority",
+    "host": "tms-development.7rnvm.mongodb.net"
+}
