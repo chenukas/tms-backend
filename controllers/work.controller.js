@@ -6,7 +6,7 @@ const createWork = (req, res) => {
   if(!req.body.timeTableType) {
     return res.status(400).json({
       success: false,
-      message: "Time Table name is undefined"
+      message: "Time Table type is undefined"
     });
   }
   if(!req.body.noOfWorkingDays) {
@@ -18,7 +18,7 @@ const createWork = (req, res) => {
   if(!req.body.workingDays) {
     return res.status(400).json({
       success: false,
-      message: "working days is undefined"
+      message: "working days are undefined"
     });
   }
   if(!req.body.workingTime) {
@@ -59,13 +59,29 @@ const viewWork = (req, res) => {
   });
 };
 
+//view the working days and hours by using ID
+const viewWorkById = (req, res) => {
+    Work.findById(req.params.id).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result,
+            message: "Searching ID is found."
+        });
+    }).catch(err => {
+        res.status(501).json({
+            success: false,
+            message: err.message
+        });
+    });
+};
+
 //edit working days and hours by using workID
 const updateWork = (req, res) => {
 
   if(!req.body.timeTableType) {
     return res.status(400).json({
       success: false,
-      message: "Time Table name is undefined"
+      message: "Time Table type is undefined"
     });
   }
   if(!req.body.noOfWorkingDays) {
@@ -77,7 +93,7 @@ const updateWork = (req, res) => {
   if(!req.body.workingDays) {
     return res.status(400).json({
       success: false,
-      message: "working days is undefined"
+      message: "working days are undefined"
     });
   }
   if(!req.body.workingTime) {
@@ -126,5 +142,6 @@ module.exports = {
   createWork,
   viewWork,
   updateWork,
-  deleteWork
+  deleteWork,
+  viewWorkById
 }
