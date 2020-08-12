@@ -1,7 +1,7 @@
 const Lecturer = require('../models/lecturer.model');
 const mongoose = require('mongoose');
 
-const addLecturers = (res, req) => {
+const addLecturer = (res, req) => {
 
     if(!req.body.fname) {
         return res.status(400).json({
@@ -17,6 +17,7 @@ const addLecturers = (res, req) => {
         })
     }
 
+    //Adding lecturer
     const lecturer = new Lecturer(req.body);
 
     lecturer.save().then(result => {
@@ -33,6 +34,37 @@ const addLecturers = (res, req) => {
 
 };
 
+const viewLecturers = (req, res) => {
+    Lecturer.find({}).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch(err => {
+        res.status(501).json({
+            success: false,
+            data: err.message
+        });
+    });
+};
+
+const viewLecturersById = (req, res) => {
+    Lecturer.findById(req.params.id).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch(err => {
+        res.status(501).json({
+            success: false,
+            data: err.message
+        });
+    });
+}
+
+
 module.exports = {
-    addLecturers
+    addLecturer,
+    viewLecturers,
+    viewLecturersById
 }
