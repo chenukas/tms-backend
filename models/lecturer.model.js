@@ -12,10 +12,6 @@ const lecturerSchema = new mongoose.Schema({
     building: { type: String, required: true },
     level: { type: Number, required: true }
 
-},
+});
 
-{ timestamps: true }
-
-);
-
-module.exports = mongoose.model('lecturers', lecturerSchema);
+module.exports = mongoose.model('lecturer', lecturerSchema);
