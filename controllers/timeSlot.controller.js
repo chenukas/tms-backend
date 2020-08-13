@@ -3,6 +3,8 @@ const TimeSlots = require('../models/timeSlot.model');
 // create new working days and hours
 const createTimeSlot = (req, res) => {
 
+    console.log("hello");
+
     if(!req.body.timeTableID) {
         return res.status(400).json({
           success: false,
@@ -15,10 +17,16 @@ const createTimeSlot = (req, res) => {
         message: "Time Table Type is undefined"
         });
     }
-    if(!req.body.timeSlots) {
+    if(!req.body.timeSlotsStartTimes) {
         return res.status(400).json({
         success: false,
-        message: "Time Slots are undefined"
+        message: "Time Slots Start Times are undefined"
+        });
+    }
+    if(!req.body.timeSlotsEndTimes) {
+        return res.status(400).json({
+            success: false,
+            message: "Time Slots End Times are undefined"
         });
     }
 
