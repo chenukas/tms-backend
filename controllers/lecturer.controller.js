@@ -66,7 +66,7 @@ const viewLecturersById = (req, res) => {
             data: err.message
         });
     });
-}
+};
 
 const updateLecturerById = (req, res) => {
 

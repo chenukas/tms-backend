@@ -6,6 +6,7 @@ const programmesRouter = require('./programme.routes');
 const subGroupsRouter = require('./subGroup.routes');
 const yearSemsRouter = require('./yearSem.routes');
 const batchesRouter = require('./batch.routes');
+const subjectsRouter = require('./subject.routes');
 
 const init = app => {
 
@@ -18,6 +19,7 @@ const init = app => {
     app.use(subGroupsRouter);
     app.use(yearSemsRouter);
     app.use(batchesRouter);
+    app.use(subjectsRouter);
 
 };
 
