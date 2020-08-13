@@ -10,7 +10,7 @@ const lecturerSchema = new mongoose.Schema({
     department: { type: String, required: true },
     center: { type: String, required: true },
     building: { type: String, required: true },
-    level: { type: Number, required: true }
+    level: { type: String, required: true }
 
 });
 
