@@ -6,7 +6,7 @@ const createWork = (req, res) => {
   if(!req.body.timeTableType) {
     return res.status(400).json({
       success: false,
-      message: "Time Table name is undefined"
+      message: "Time Table type is undefined"
     });
   }
   if(!req.body.noOfWorkingDays) {
@@ -15,26 +15,31 @@ const createWork = (req, res) => {
       message: "No of working days is undefined"
     });
   }
-  if(!req.body.workingDays) {
-    return res.status(400).json({
-      success: false,
-      message: "working days is undefined"
-    });
-  }
-  if(!req.body.workingTime) {
-    return res.status(400).json({
-      success: false,
-      message: "working time is undefined"
-    });
-  }
+    if(!req.body.noOfHours) {
+        return res.status(400).json({
+            success: false,
+            message: "No of working days is undefined"
+        });
+    }
+    if(!req.body.noOfMinutes) {
+        return res.status(400).json({
+            success: false,
+            message: "No of working days is undefined"
+        });
+    }
+    if(!req.body.workingDays) {
+        return res.status(400).json({
+            success: false,
+            message: "No of working days is undefined"
+        });
+    }
 
-  const work = new Work(req.body);
+  work = new Work(req.body);
 
-  work.save().then(result => {
-    res.status(200).json({
+    work.save().then(result => {
+      res.status(200).json({
       success: true,
-      data: result,
-      message: "Successfully Added."
+      data: result
     });
   }).catch(err => {
     res.status(500).json({
@@ -46,11 +51,8 @@ const createWork = (req, res) => {
 
 //view working days and hours
 const viewWork = (req, res) => {
-  Work.find({}).then(result => {
-      res.status(200).json({
-          success: true,
-          data: result
-      });
+  Work.find({},(err, works) =>{
+      res.json(works)
   }).catch(err => {
       res.status(501).json({
           success: false,
@@ -59,13 +61,29 @@ const viewWork = (req, res) => {
   });
 };
 
+//view the working days and hours by using ID
+const viewWorkById = (req, res) => {
+    Work.findById(req.params.id).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result,
+            message: "Searching ID is found."
+        });
+    }).catch(err => {
+        res.status(501).json({
+            success: false,
+            message: err.message
+        });
+    });
+};
+
 //edit working days and hours by using workID
 const updateWork = (req, res) => {
 
   if(!req.body.timeTableType) {
     return res.status(400).json({
       success: false,
-      message: "Time Table name is undefined"
+      message: "Time Table type is undefined"
     });
   }
   if(!req.body.noOfWorkingDays) {
@@ -74,24 +92,14 @@ const updateWork = (req, res) => {
       message: "No of working days is undefined"
     });
   }
-  if(!req.body.workingDays) {
-    return res.status(400).json({
-      success: false,
-      message: "working days is undefined"
-    });
-  }
-  if(!req.body.workingTime) {
-    return res.status(400).json({
-      success: false,
-      message: "working time is undefined"
-    });
-  }
 
   Work.findByIdAndUpdate(req.params.id,{
       timeTableType: req.body.timeTableType,
       noOfWorkingDays: req.body.noOfWorkingDays,
       workingDays: req.body.workingDays,
-      workingTime: req.body.workingTime
+      noOfHours: req.body.noOfHours,
+      noOfMinutes: req.body.noOfMinutes
+
   }, {new: true}).then(result => {
       res.status(200).json({
           success: true,
@@ -126,5 +134,6 @@ module.exports = {
   createWork,
   viewWork,
   updateWork,
-  deleteWork
+  deleteWork,
+  viewWorkById
 }

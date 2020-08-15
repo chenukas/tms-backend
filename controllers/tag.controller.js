@@ -10,6 +10,7 @@ const createTag = (req, res) => {
     }
 
     const tag = new Tag(req.body);
+    //console.log(tag);
 
     tag.save().then(result => {
         res.status(200).json({

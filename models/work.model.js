@@ -3,27 +3,25 @@ const mongoose = require('mongoose');
 const workSchema = new mongoose.Schema({
     timeTableType: {
       type: String,
-      required: true
+        required: true 
     },
-  noOfWorkingDays: {
-    type: Number,
-    required: true
-  },
-  workingDays: {
-    type: Array,
-    required: true
-  },
-  workingTime: [{
-    hours: {
+    noOfWorkingDays: {
       type: Number,
       required: true
     },
-    minutes: {
+    noOfHours: {
       type: Number,
-      required: true
+        required: true
+    },
+    noOfMinutes: {
+      type: Number,
+        required: true
+    },
+    workingDays: {
+      type: String,
+        required: true
     }
-  }]
-},{
+  },{
   timestamps: true
 });
 
