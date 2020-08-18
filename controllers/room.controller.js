@@ -1,8 +1,8 @@
-const Building = require('../models/building.model');
+const Room = require('../models/room.model');
 const mongoose = require('mongoose');
 
-const addBuilding = (req,res) => {
-    if (!req.body.buildn){
+const addRoom = (req,res) => {
+    if (!req.body.roomn){
         return res.status(400).json({
             success: false,
             message: "Name is undefined",
@@ -10,10 +10,10 @@ const addBuilding = (req,res) => {
     }
 
     //create object
-    const building = new Building(req.body);
+    const room = new Room(req.body);
 
     //save object
-    building.save().then(result => {
+    room.save().then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -28,8 +28,8 @@ const addBuilding = (req,res) => {
 
 }
 
-const getAllBuildings = (req, res) => {
-    Building.find({}).then(result => {
+const getAllRooms = (req, res) => {
+    Room.find({}).then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -42,8 +42,8 @@ const getAllBuildings = (req, res) => {
     });
 };
 
-const viewBuilding = (req, res) => {
-    Building.findById(req.params.id).then(result => {
+const viewRoom = (req, res) => {
+    Room.findById(req.params.id).then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -56,17 +56,17 @@ const viewBuilding = (req, res) => {
     });
 };
 
-const updateBuilding = (req, res) => {
+const updateRoom = (req, res) => {
 
-    if (!req.body.buildn){
+    if (!req.body.roomn){
         return res.status(400).json({
             success: false,
             message: "Name is undefined",
         });
     }
 
-    Building.findByIdAndUpdate(req.params.id,{
-        buildn: req.body.buildn
+    Room.findByIdAndUpdate(req.params.id,{
+        roomn: req.body.roomn
     }, {new: true}).then(result => {
         res.status(200).json({
             success: true,
@@ -80,8 +80,8 @@ const updateBuilding = (req, res) => {
     });
 };
 
-const deleteBuilding = (req, res) => {
-    Building.findByIdAndDelete(req.params.id).then(result => {
+const deleteRoom = (req, res) => {
+    Room.findByIdAndDelete(req.params.id).then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -95,9 +95,9 @@ const deleteBuilding = (req, res) => {
 };
 
 module.exports = {
-    addBuilding,
-    getAllBuildings,
-    viewBuilding,
-    updateBuilding,
-    deleteBuilding
+    addRoom,
+    getAllRooms,
+    viewRoom,
+    updateRoom,
+    deleteRoom
 };
