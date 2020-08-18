@@ -56,9 +56,48 @@ const viewBuilding = (req, res) => {
     });
 };
 
+const updateBuilding = (req, res) => {
+
+    if (!req.body.buildn){
+        return res.status(400).json({
+            success: false,
+            message: "Name is undefined",
+        });
+    }
+
+    Building.findByIdAndUpdate(req.params.id,{
+        buildn: req.body.buildn
+    }, {new: true}).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch(err => {
+        res.status(501).json({
+            success: false,
+            message: err.message
+        });
+    });
+};
+
+const deleteBuilding = (req, res) => {
+    Building.findByIdAndDelete(req.params.id).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch(err => {
+        res.status(501).json({
+            success: false,
+            message: err.message
+        });
+    });
+};
+
 module.exports = {
     addBuilding,
     getAllBuildings,
     viewBuilding,
-    
+    updateBuilding,
+    deleteBuilding
 };
