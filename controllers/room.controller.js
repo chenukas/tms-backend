@@ -62,33 +62,57 @@ const getAllRooms = (req, res) => {
             data: err.message
         });
     });
+}
+
+const getAllRoomsByBuilding = (req, res) => {
+    Room.find({ building: req.params.id })
+        .populate('building')
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch(err => {
+            res.status(501).json({
+                success: false,
+                data: err.message
+            });
+    });
 };
 
 const viewRoom = (req, res) => {
-    Room.findById(req.params.id).then(result => {
-        res.status(200).json({
-            success: true,
-            data: result
+    Room.findById(req.params.id)
+        .populate('building')
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                data: result
+            });
+         }).catch(err => {
+            res.status(501).json({
+                success: false,
+                data: err.message
+            });
         });
-    }).catch(err => {
-        res.status(501).json({
-            success: false,
-            data: err.message
-        });
-    });
 };
 
 const updateRoom = (req, res) => {
 
-    if (!req.body.roomn){
+    const { room_name, room_type } = req.body;
+
+    if (!room_name || !room_type){
         return res.status(400).json({
             success: false,
-            message: "Name is undefined",
+            message: "Invalid parameters",
+            error: {
+                required: ['room_name', 'room_type'],
+                received: [...Object.values(req.body)]
+            }
         });
     }
 
     Room.findByIdAndUpdate(req.params.id,{
-        roomn: req.body.roomn
+        room_name, room_type
     }, {new: true}).then(result => {
         res.status(200).json({
             success: true,
@@ -102,23 +126,36 @@ const updateRoom = (req, res) => {
     });
 };
 
-const deleteRoom = (req, res) => {
-    Room.findByIdAndDelete(req.params.id).then(result => {
-        res.status(200).json({
-            success: true,
-            data: result
+const deleteRoom = async (req, res) => {
+
+    try {
+        const result = await Room.findByIdAndDelete(req.params.id);
+
+        if (result && result.building) {
+            await buildingModel.findByIdAndUpdate(result.building, {
+                $pullAll: {
+                    rooms: [req.params.id]
+                }
+            });
+        }
+
+        return res.status(200).json({
+            success: true, data: result
         });
-    }).catch(err => {
-        res.status(501).json({
-            success: false,
-            message: err.message
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false, 
+            message: err.message,
         });
-    });
+    }
+
 };
 
 module.exports = {
     addRoomToBuilding,
     getAllRooms,
+    getAllRoomsByBuilding,
     viewRoom,
     updateRoom,
     deleteRoom

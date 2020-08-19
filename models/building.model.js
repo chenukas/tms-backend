@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const roomModel = require('./room.model');
 const { Schema } = mongoose;
 
 const buildingSchema = new Schema(
@@ -8,5 +9,13 @@ const buildingSchema = new Schema(
     },
     { timestamps: true }
 );
+
+async function deleteRoomsOnDelete(building) {
+    console.log(building);
+    await roomModel
+        .deleteMany({ _id: { $in: building.rooms }});
+}
+
+buildingSchema.post('remove', deleteRoomsOnDelete);
 
 module.exports = mongoose.model('Building', buildingSchema);
