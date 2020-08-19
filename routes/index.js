@@ -1,5 +1,5 @@
 const tagsRouter = require('./tag.routes');
-const worksRouter = require('./work.routes');
+const roomRouter = require('./room.routes');
 const lecturersRouter = require('./lecturer.routes');
 const groupsRouter = require('./group.routes');
 const programmesRouter = require('./programme.routes');
@@ -8,6 +8,8 @@ const yearSemsRouter = require('./yearSem.routes');
 const batchesRouter = require('./batch.routes');
 const subjectsRouter = require('./subject.routes');
 const timeSlotsRouter = require('./timeSlot.routes');
+const worksRouter = require('./work.routes');
+const buildingRouter = require('./building.routes');
 
 const init = app => {
 
@@ -21,6 +23,8 @@ const init = app => {
     app.use(batchesRouter);
     app.use(subjectsRouter);
     app.use(timeSlotsRouter);
+    app.use(buildingRouter);
+    app.use(roomRouter);
 };
 
 module.exports = init;
