@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const roomController = require('../controllers/room.controller');
 
-router.post('/rooms', roomController.addRoom);
+router.post('/buildings/:id/rooms', roomController.addRoomToBuilding);
 router.get('/rooms', roomController.getAllRooms);
 router.get('/rooms/:id', roomController.viewRoom);
 router.put('/rooms/:id', roomController.updateRoom);

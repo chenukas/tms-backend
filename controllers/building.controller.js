@@ -2,15 +2,18 @@ const Building = require('../models/building.model');
 const mongoose = require('mongoose');
 
 const addBuilding = (req,res) => {
-    if (!req.body.buildn){
+
+    const { building_name } = req.body;
+
+    if (!building_name){
         return res.status(400).json({
             success: false,
-            message: "Name is undefined",
+            message: "Parameter \'building_name\' is undefined",
         });
     }
 
     //create object
-    const building = new Building(req.body);
+    const building = new Building({ building_name });
 
     //save object
     building.save().then(result => {
@@ -29,44 +32,46 @@ const addBuilding = (req,res) => {
 }
 
 const getAllBuildings = (req, res) => {
-    Building.find({}).then(result => {
-        res.status(200).json({
-            success: true,
-            data: result
-        });
-    }).catch(err => {
-        res.status(501).json({
-            success: false,
-            data: err.message
-        });
+    Building.find({})
+        .populate('rooms')
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch(err => {
+            res.status(501).json({
+                success: false,
+                data: err.message
+            });
     });
 };
 
-const viewBuilding = (req, res) => {
-    Building.findById(req.params.id).then(result => {
-        res.status(200).json({
-            success: true,
-            data: result
-        });
-    }).catch(err => {
-        res.status(501).json({
+const viewBuildingById = (req, res) => {
+    Building.findById(req.params.id)
+        .populate('rooms')
+        .then(result =>  res.status(200).json({
+                success: true,
+                data: result
+        })).catch(err => res.status(501).json({
             success: false,
             data: err.message
-        });
-    });
+        }));
 };
 
 const updateBuilding = (req, res) => {
 
-    if (!req.body.buildn){
+    const { building_name } = req.body;
+
+    if (!building_name){
         return res.status(400).json({
             success: false,
-            message: "Name is undefined",
+            message: "Parameter \'building_name\' is undefined",
         });
     }
 
-    Building.findByIdAndUpdate(req.params.id,{
-        buildn: req.body.buildn
+    Building.findByIdAndUpdate(req.params.id, {
+        building_name
     }, {new: true}).then(result => {
         res.status(200).json({
             success: true,
@@ -97,7 +102,7 @@ const deleteBuilding = (req, res) => {
 module.exports = {
     addBuilding,
     getAllBuildings,
-    viewBuilding,
+    viewBuildingById,
     updateBuilding,
     deleteBuilding
 };

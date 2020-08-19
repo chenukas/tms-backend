@@ -1,35 +1,57 @@
 const Room = require('../models/room.model');
 const mongoose = require('mongoose');
+const buildingModel = require('../models/building.model');
 
-const addRoom = (req,res) => {
-    if (!req.body.roomn){
+const addRoomToBuilding = async (req,res) => {
+
+    const { room_name, room_type } = req.body;
+
+    if (!room_name){
         return res.status(400).json({
             success: false,
-            message: "Name is undefined",
+            message: "Parameter \'room_name\' is undefined",
         });
     }
 
-    //create object
-    const room = new Room(req.body);
+    try {
 
-    //save object
-    room.save().then(result => {
-        res.status(200).json({
-            success: true,
-            data: result
-        });
-    }).catch(err => {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        });
-    });
+        const building = await buildingModel.findById(req.params.id);
 
+        if (!building) {
+            return res.status(400).json({
+                success: false,
+                message: `Building not found for provided id \'${req.params.id}\'`
+            })
+        }
+
+        //create object
+        const room = new Room({ room_name, room_type, building: mongoose.Types.ObjectId(req.params.id) });
+
+        const result = await room.save();
+
+        // add room to building
+        await buildingModel.findByIdAndUpdate(req.params.id, {
+            $push: {
+                rooms: result._id
+            }
+        });
+
+        return res.status(200).json({
+            success: true, data: result
+        });
+
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false, message: err.message
+        });
+    }
+    
 
 }
 
 const getAllRooms = (req, res) => {
-    Room.find({}).then(result => {
+    Room.find({}).populate('building').then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -95,7 +117,7 @@ const deleteRoom = (req, res) => {
 };
 
 module.exports = {
-    addRoom,
+    addRoomToBuilding,
     getAllRooms,
     viewRoom,
     updateRoom,

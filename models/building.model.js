@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-// const { Schema } = mongoose;
+const { Schema } = mongoose;
 
 const buildingSchema = new Schema(
     {
-        buildn: { type: String, required: true, unique: true }
+        building_name: { type: String, required: true, unique: true },
+        rooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}]
     },
     { timestamps: true }
 );
