@@ -11,6 +11,7 @@ const timeSlotsRouter = require('./timeSlot.routes');
 const worksRouter = require('./work.routes');
 const buildingRouter = require('./building.routes');
 const statisticsController = require('../controllers/statistics.controller');
+const sessionsRouter = require('../routes/session.routes');
 
 const init = app => {
 
@@ -26,6 +27,7 @@ const init = app => {
     app.use(timeSlotsRouter);
     app.use(buildingRouter);
     app.use(roomRouter);
+    app.use(sessionsRouter);
 
     app.get('/statistics', statisticsController.getStatistics);
 };
