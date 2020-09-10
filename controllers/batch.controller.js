@@ -39,7 +39,7 @@ const viewBatches = (req, res) => {
 };
 
 const viewMainGroups = (req, res) => {
-    Batch.find({type:maingroup}).then(result => {
+    Batch.find({type:'maingroup'}).then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -53,7 +53,7 @@ const viewMainGroups = (req, res) => {
 };
 
 const viewSubGroups = (req, res) => {
-    Batch.find({type:subgroup}).then(result => {
+    Batch.find({type:'subgroup'}).then(result => {
         res.status(200).json({
             success: true,
             data: result
