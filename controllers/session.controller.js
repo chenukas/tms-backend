@@ -89,12 +89,13 @@ const updateSessionById = (req,res) => {
     }
 
     Session.findByIdAndUpdate(req.params.id, {
-        lecName : req.body.lecName,
-        subName : req.body.subName,
+        selectedLecturer : req.body.selectedLecturer,
+        selectedSubject : req.body.selectedSubject,
         subCode : req.body.subCode,
-        tag : req.body.tag,
-        groupId : req.body.groupId,
-        subGroupId : req.body.subGroupId,
+        selectedMainGroup : req.body.selectedMainGroup,
+        selectedSubGroup : req.body.selectedSubGroup,
+        selectedTag : req.body.selectedTag,
+        selectedBatch : req.body.selectedBatch,
         studentCount : req.body.studentCount,
         duration : req.body.duration
     },{new: true}).then(result => {
