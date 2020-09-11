@@ -7,4 +7,4 @@ router.get('/sessions/:id', sessionController.viewSessionsById);
 router.put('/sessions/:id', sessionController.updateSessionById);
 router.delete('/sessions/:id', sessionController.deleteSessionById);
 
-module.exports = rouetr;
+module.exports = router;
