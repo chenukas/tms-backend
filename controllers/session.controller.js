@@ -1,8 +1,12 @@
 const Session = require("../models/session.model");
+const mongoose = require('mongoose');
 
 const addSession = (req, res) => {
   //Adding session
   const session = new Session(req.body);
+  session.selectedLecturer = mongoose.Types.ObjectId(req.body.selectedLecturer);
+  session.selectedSubject = mongoose.Types.ObjectId(req.body.selectedSubject);
+  session.selectedGroup = mongoose.Types.ObjectId(req.body.selectedGroup);
 
   session
     .save()
@@ -22,6 +26,9 @@ const addSession = (req, res) => {
 
 const viewSessions = (req, res) => {
   Session.find({})
+    .populate("lecturer")
+    .populate("subject")
+    .populate("batch")
     .then((result) => {
       res.status(200).json({
         success: true,
