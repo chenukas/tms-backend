@@ -1,17 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const sessionSchema = new mongoose.Schema({
-
-    selectedLecturer : { type : String, required : true },
-    selectedSubject : { type : String, required :true },
-    subCode : { type : String, required : true },
-    selectedTag : { type : String, required : true },
-    selectedMainGroup : { type : String, required : true },
-    selectedSubGroup : { type : String, required : true },
-    selectedBatch : { type : String, required : true },
-    studentCount : { type : Number, required : true },
-    duration : { type : Number, required : true }
-
+  selectedLecturer: { type: Schema.Types.ObjectId, ref: "lecturer" },
+  selectedSubject: { type: Schema.Types.ObjectId, ref: "subject" },
+  selectedTag: { type: String },
+  selectedGroup: { type: Schema.Types.ObjectId, ref: "batch" },
+  studentCount: { type: String },
+  duration: { type: String },
 });
 
-module.exports = mongoose.model('session', sessionSchema);
+module.exports = mongoose.model("session", sessionSchema);
