@@ -1,5 +1,5 @@
 const Session = require("../models/session.model");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const addSession = (req, res) => {
   //Adding session
@@ -26,9 +26,9 @@ const addSession = (req, res) => {
 
 const viewSessions = (req, res) => {
   Session.find({})
-    .populate("lecturer")
-    .populate("subject")
-    .populate("batch")
+    .populate("selectedLecturer")
+    .populate("selectedSubject")
+    .populate("selectedGroup")
     .then((result) => {
       res.status(200).json({
         success: true,
