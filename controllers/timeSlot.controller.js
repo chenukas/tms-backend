@@ -5,10 +5,16 @@ const createTimeSlot = (req, res) => {
 
     console.log("hello");
 
-    if(!req.body.timeTableID) {
+    if(!req.body.workID) {
         return res.status(400).json({
           success: false,
-          message: "Time Table ID is undefined"
+          message: "Work ID is undefined"
+        });
+    }
+    if(!req.body.timeTableID) {
+        return res.status(400).json({
+        success: false,
+        message: "Time Table ID is undefined"
         });
     }
     if(!req.body.timeTableType) {
@@ -17,16 +23,10 @@ const createTimeSlot = (req, res) => {
         message: "Time Table Type is undefined"
         });
     }
-    if(!req.body.timeSlotsStartTimes) {
+    if(!req.body.timeSlotsTimes) {
         return res.status(400).json({
         success: false,
         message: "Time Slots Start Times are undefined"
-        });
-    }
-    if(!req.body.timeSlotsEndTimes) {
-        return res.status(400).json({
-            success: false,
-            message: "Time Slots End Times are undefined"
         });
     }
 
@@ -46,6 +46,45 @@ const createTimeSlot = (req, res) => {
     });
 };
 
+const viewTimeSlotsByTimeID = (req, res) => {
+
+  console.log("hii");
+
+    if(!req.body.timeTableID) {
+      return res.status(400).json({
+        success: false,
+        message: "Time Table ID is undefined"
+      });
+    }
+  
+    const timeTableID = req.body.timeTableID;
+    let timeSlot;
+  
+    TimeSlots.find({
+      timeTableID: timeTableID
+      },(err, timeSlots) =>{
+      if (err){
+        console.log('err 2:', err);
+        return res.send({
+            success: false,
+            message: 'Error: Server error'
+        });
+      }
+      
+      timeSlot = timeSlots[0];
+      
+      TimeSlots.findById(timeSlot._id).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result,
+            message: "Searching ID is found."
+        });
+      })
+    });
+    
+  };
+
 module.exports = {
-    createTimeSlot
+    createTimeSlot,
+    viewTimeSlotsByTimeID
 }
