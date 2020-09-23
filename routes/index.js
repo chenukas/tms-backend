@@ -11,7 +11,10 @@ const timeSlotsRouter = require('./timeSlot.routes');
 const worksRouter = require('./work.routes');
 const buildingRouter = require('./building.routes');
 const statisticsController = require('../controllers/statistics.controller');
-const sessionsRouter = require('../routes/session.routes');
+const sessionsRouter = require('./session.routes');
+const notAvailableBatchRouter = require('./notAvailableBatch.routes');
+const notAvailableLecturerRouter = require('./notAvailableLecturer.routes');
+const notAvailableSessionRouter = require('./notAvailableSession.routes');
 
 const init = app => {
 
@@ -28,6 +31,9 @@ const init = app => {
     app.use(buildingRouter);
     app.use(roomRouter);
     app.use(sessionsRouter);
+    app.use(notAvailableBatchRouter);
+    app.use(notAvailableLecturerRouter);
+    app.use(notAvailableSessionRouter);
 
     app.get('/statistics', statisticsController.getStatistics);
 };
