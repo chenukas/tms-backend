@@ -8,6 +8,6 @@ const sessionSchema = new mongoose.Schema({
   selectedGroup: { type: Schema.Types.ObjectId, ref: "batch" },
   studentCount: { type: String },
   duration: { type: String },
-});
+}, {timestamps: true});
 
 module.exports = mongoose.model("session", sessionSchema);
