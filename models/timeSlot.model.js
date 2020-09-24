@@ -13,7 +13,11 @@ const timeSlotSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    timeSlotsTimes: {
+    timeSlotsStartTimes: {
+        type: String,
+        required: true
+    },
+    timeSlotsEndTimes: {
         type: String,
         required: true
     }

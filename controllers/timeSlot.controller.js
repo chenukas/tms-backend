@@ -23,10 +23,16 @@ const createTimeSlot = (req, res) => {
         message: "Time Table Type is undefined"
         });
     }
-    if(!req.body.timeSlotsTimes) {
+    if(!req.body.timeSlotsStartTimes) {
+      return res.status(400).json({
+      success: false,
+      message: "Time Slots End Times are undefined"
+      });
+  }
+    if(!req.body.timeSlotsEndTimes) {
         return res.status(400).json({
         success: false,
-        message: "Time Slots Start Times are undefined"
+        message: "Time Slots End Times are undefined"
         });
     }
 
