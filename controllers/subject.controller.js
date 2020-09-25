@@ -113,8 +113,22 @@ const deleteSubjectById = (req, res) => {
     });
 };
 
-const viewFourthYearSubjects = (req, res) => {
-    Subject.find({year:"year4"}).then(result => {
+const viewCanOverlappingSubjects = (req, res) => {
+    Subject.find({noolapping: false}).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch(err => {
+        res.status(501).json({
+            success: false,
+            data: err.message
+        });
+    });
+}
+
+const viewNonParallelSubjects = (req, res) => {
+    Subject.find({parallel: false}).then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -143,6 +157,22 @@ const updateSubjectParallelById = (req, res) => {
     });
 }
 
+const updateSubjectNoolappingById = (req, res) => {
+    Subject.findByIdAndUpdate(req.params.id, {
+        noolapping: true
+    }, {new: true}).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch(err => {
+        res.status(504).json({
+            success: false,
+            message: err.message
+        });
+    });
+}
+
 module.exports = {
     addSubject,
     viewSubjects,
@@ -150,5 +180,8 @@ module.exports = {
     updateSubjectById,
     deleteSubjectById,
     updateSubjectParallelById,
-    viewFourthYearSubjects
+    viewCanOverlappingSubjects,
+    viewNonParallelSubjects,
+    updateSubjectNoolappingById
+
 }
