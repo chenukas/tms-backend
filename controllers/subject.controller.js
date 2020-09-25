@@ -113,10 +113,42 @@ const deleteSubjectById = (req, res) => {
     });
 };
 
+const viewFourthYearSubjects = (req, res) => {
+    Subject.find({year:"year4"}).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch(err => {
+        res.status(501).json({
+            success: false,
+            data: err.message
+        });
+    });
+}
+
+const updateSubjectParallelById = (req, res) => {
+    Subject.findByIdAndUpdate(req.params.id, {
+        parallel: true
+    }, {new: true}).then(result => {
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch(err => {
+        res.status(504).json({
+            success: false,
+            message: err.message
+        });
+    });
+}
+
 module.exports = {
     addSubject,
     viewSubjects,
     viewSubjectById,
     updateSubjectById,
-    deleteSubjectById
+    deleteSubjectById,
+    updateSubjectParallelById,
+    viewFourthYearSubjects
 }

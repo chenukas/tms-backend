@@ -9,7 +9,8 @@ const subjectSchema = new mongoose.Schema ({
     lechours: { type: Number, required: true },
     tutehours: { type: Number, required: true },
     labhours: { type: Number, required: true },
-    evahours: { type: Number }
+    evahours: { type: Number },
+    parallel: { type: Boolean, default: false}
 
 });
 
