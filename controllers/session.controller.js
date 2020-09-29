@@ -117,10 +117,50 @@ const deleteSessionById = (req, res) => {
     });
 };
 
+const viewLectureSessions = (req, res) => {
+  Session.find({selectedTag: 'Lecture'})
+    .populate("selectedLecturer")
+    .populate("selectedSubject")
+    .populate("selectedGroup")
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    })
+    .catch((err) => {
+      res.status(501).json({
+        success: false,
+        data: err.message,
+      });
+    });
+};
+
+const viewTutorialSessions = (req, res) => {
+  Session.find({selectedTag: 'Tutorial'})
+    .populate("selectedLecturer")
+    .populate("selectedSubject")
+    .populate("selectedGroup")
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    })
+    .catch((err) => {
+      res.status(501).json({
+        success: false,
+        data: err.message,
+      });
+    });
+};
+
 module.exports = {
   addSession,
   viewSessions,
   viewSessionsById,
   updateSessionById,
   deleteSessionById,
+  viewLectureSessions,
+  viewTutorialSessions
 };

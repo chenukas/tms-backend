@@ -17,6 +17,7 @@ const notAvailableLecturerRouter = require('./notAvailableLecturer.routes');
 const notAvailableSessionRouter = require('./notAvailableSession.routes');
 const slotsAndSessionRouter = require('./slotsAndSession.routes');
 
+const consecutiveSessionRouter = require('./consecutiveSession.routes');
 
 const init = app => {
 
@@ -37,6 +38,7 @@ const init = app => {
     app.use(notAvailableLecturerRouter);
     app.use(notAvailableSessionRouter);
     app.use(slotsAndSessionRouter);
+    app.use(consecutiveSessionRouter);
 
     app.get('/statistics', statisticsController.getStatistics);
 };
