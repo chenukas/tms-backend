@@ -15,6 +15,8 @@ const sessionsRouter = require('./session.routes');
 const notAvailableBatchRouter = require('./notAvailableBatch.routes');
 const notAvailableLecturerRouter = require('./notAvailableLecturer.routes');
 const notAvailableSessionRouter = require('./notAvailableSession.routes');
+const slotsAndSessionRouter = require('./slotsAndSession.routes');
+
 
 const init = app => {
 
@@ -34,6 +36,7 @@ const init = app => {
     app.use(notAvailableBatchRouter);
     app.use(notAvailableLecturerRouter);
     app.use(notAvailableSessionRouter);
+    app.use(slotsAndSessionRouter);
 
     app.get('/statistics', statisticsController.getStatistics);
 };
