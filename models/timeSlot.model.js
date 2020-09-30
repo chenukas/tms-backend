@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
 const timeSlotSchema = new mongoose.Schema({
+    workID: {
+        type: String,
+        required: true
+    },
     timeTableID: {
         type: String,
         required: true
-      },
+    },
     timeTableType: {
         type: String,
         required: true

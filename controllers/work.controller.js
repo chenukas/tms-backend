@@ -3,6 +3,12 @@ const Work = require('../models/work.model');
 // create new working days and hours
 const createWork = (req, res) => {
 
+  if(!req.body.timeTableID) {
+    return res.status(400).json({
+      success: false,
+      message: "Time Table ID is undefined"
+    });
+  }
   if(!req.body.timeTableType) {
     return res.status(400).json({
       success: false,
@@ -18,19 +24,13 @@ const createWork = (req, res) => {
     if(!req.body.noOfHours) {
         return res.status(400).json({
             success: false,
-            message: "No of working days is undefined"
-        });
-    }
-    if(!req.body.noOfMinutes) {
-        return res.status(400).json({
-            success: false,
-            message: "No of working days is undefined"
+            message: "No of Hours is undefined"
         });
     }
     if(!req.body.workingDays) {
         return res.status(400).json({
             success: false,
-            message: "No of working days is undefined"
+            message: "working days is undefined"
         });
     }
 
@@ -80,6 +80,12 @@ const viewWorkById = (req, res) => {
 //edit working days and hours by using workID
 const updateWork = (req, res) => {
 
+  if(!req.body.timeTableID) {
+    return res.status(400).json({
+      success: false,
+      message: "Time Table ID is undefined"
+    });
+  }
   if(!req.body.timeTableType) {
     return res.status(400).json({
       success: false,
@@ -94,6 +100,7 @@ const updateWork = (req, res) => {
   }
 
   Work.findByIdAndUpdate(req.params.id,{
+      timeTableID: req.body.timeTableID,
       timeTableType: req.body.timeTableType,
       noOfWorkingDays: req.body.noOfWorkingDays,
       workingDays: req.body.workingDays,
@@ -130,10 +137,47 @@ const deleteWork = (req, res) => {
   });
 };
 
+const viewWorkByTimeID = (req, res) => {
+
+  if(!req.body.timeTableID) {
+    return res.status(400).json({
+      success: false,
+      message: "Time Table ID is undefined"
+    });
+  }
+
+  const timeTableID = req.body.timeTableID;
+  let work;
+  
+  Work.find({
+    timeTableID: timeTableID
+    },(err, works) =>{
+    if (err){
+      console.log('err 2:', err);
+      return res.send({
+          success: false,
+          message: 'Error: Server error'
+      });
+    }
+    
+    work = works[0];
+    
+    Work.findById(work._id).then(result => {
+      res.status(200).json({
+          success: true,
+          data: result,
+          message: "Searching ID is found."
+      });
+    })
+  });
+
+};
+
 module.exports = {
   createWork,
   viewWork,
   updateWork,
   deleteWork,
-  viewWorkById
+  viewWorkById,
+  viewWorkByTimeID
 }

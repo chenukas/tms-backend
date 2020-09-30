@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 
 const workSchema = new mongoose.Schema({
+    timeTableID: {
+      type: String,
+      required: true 
+    },
     timeTableType: {
       type: String,
-        required: true 
+      required: true 
     },
     noOfWorkingDays: {
       type: Number,
