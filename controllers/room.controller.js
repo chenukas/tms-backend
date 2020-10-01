@@ -1,6 +1,7 @@
 const Room = require('../models/room.model');
 const mongoose = require('mongoose');
 const buildingModel = require('../models/building.model');
+const roomModel = require('../models/room.model');
 
 const addRoomToBuilding = async (req,res) => {
 
@@ -51,22 +52,26 @@ const addRoomToBuilding = async (req,res) => {
 }
 
 const getAllRooms = (req, res) => {
-    Room.find({}).populate('building').then(result => {
-        res.status(200).json({
-            success: true,
-            data: result
+    Room.find({})
+        .populate('building')
+        .populate('tags')
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch(err => {
+            res.status(501).json({
+                success: false,
+                data: err.message
+            });
         });
-    }).catch(err => {
-        res.status(501).json({
-            success: false,
-            data: err.message
-        });
-    });
 }
 
 const getAllRoomsByBuilding = (req, res) => {
     Room.find({ building: req.params.id })
         .populate('building')
+        .populate('tags')
         .then(result => {
             res.status(200).json({
                 success: true,
@@ -83,6 +88,7 @@ const getAllRoomsByBuilding = (req, res) => {
 const viewRoom = (req, res) => {
     Room.findById(req.params.id)
         .populate('building')
+        .populate('tags')
         .then(result => {
             res.status(200).json({
                 success: true,
@@ -152,11 +158,46 @@ const deleteRoom = async (req, res) => {
 
 };
 
+const updateTags = async (req, res) => {
+
+    const { tags } = req.body;
+
+    if (!tags) {
+        return res.status(400).json({
+            success: false, error: 'Parameter \'tags\' is required'
+        });
+    }
+
+    if (!Array.isArray(tags)) {
+        return res.status(400).json({
+            success: false, error: 'Invalid parameter \'tags\'. [] required'
+        });
+    }
+
+    try {
+        const result = await roomModel.findOneAndUpdate({ _id: req.params.id }, {
+            $set: {
+                tags: tags.filter((value, index, self) => self.indexOf(value) === index)
+                        .map(t => mongoose.Types.ObjectId(t))
+            }
+        }, { new: true });
+
+        return res.status(200).json({
+            success: true, data: result
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false, error: err.message
+        });
+    }
+}
+
 module.exports = {
     addRoomToBuilding,
     getAllRooms,
     getAllRoomsByBuilding,
     viewRoom,
     updateRoom,
-    deleteRoom
+    deleteRoom,
+    updateTags
 };

@@ -7,6 +7,7 @@ const roomSchema = new Schema(
         room_name: { type: String, required: true, },
         room_type: { type: Number, enum: [...Object.values(ROOM_TYPES)], default: ROOM_TYPES.LECTURE_HALL },
         building: { type: Schema.Types.ObjectId, ref: 'Building', required: true },
+        tags: [ {type: Schema.Types.ObjectId, ref: 'tag'} ]
     },
     { timestamps: true }
 );
