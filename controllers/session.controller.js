@@ -29,6 +29,7 @@ const viewSessions = (req, res) => {
     .populate("selectedLecturer")
     .populate("selectedSubject")
     .populate("selectedGroup")
+    .populate('suitable_rooms')
     .then((result) => {
       res.status(200).json({
         success: true,
@@ -45,6 +46,7 @@ const viewSessions = (req, res) => {
 
 const viewSessionsById = (req, res) => {
   Session.findById(req.params.id)
+    .populate('suitable_rooms')
     .then((result) => {
       res.status(200).json({
         success: true,
@@ -155,6 +157,25 @@ const viewTutorialSessions = (req, res) => {
     });
 };
 
+const updateSuitableRooms = (req, res) => {
+  const { suitable_rooms } = req.body;
+
+  if (!suitable_rooms || !Array.isArray(suitable_rooms)) {
+      return res.status(400).json({
+          success: false, error: 'Invalid or missing parameters'
+      });
+  }
+
+  SubGroup.findByIdAndUpdate(req.params.id, {
+      $set: {
+          suitable_rooms: suitable_rooms
+              .filter((value, index, self) => self.indexOf(value) === index)
+              .map(r => mongoose.Types.ObjectId(r))
+      }
+  }, { new: true }).then(result => res.status(200).json({ success: true, data: result}))
+      .catch(err => res.status(500).json({ success: false, error: err.message }));
+}
+
 module.exports = {
   addSession,
   viewSessions,
@@ -162,5 +183,6 @@ module.exports = {
   updateSessionById,
   deleteSessionById,
   viewLectureSessions,
-  viewTutorialSessions
+  viewTutorialSessions,
+  updateSuitableRooms
 };

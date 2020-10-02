@@ -25,31 +25,35 @@ const createGroup = (req, res) => {
 };
 
 const viewGroups = (req, res) => {
-    Group.find({}).then(result => {
-        res.status(200).json({
-            success: true,
-            data: result
+    Group.find({})
+        .populate('suitable_rooms')
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch(err => {
+            res.status(501).json({
+                success: false,
+                message: err.message
+            });
         });
-    }).catch(err => {
-        res.status(501).json({
-            success: false,
-            message: err.message
-        });
-    });
 };
 
 const viewGroupById = (req, res) => {
-    Group.findById(req.params.id).then(result => {
-        res.status(200).json({
-            success: true,
-            data: result
+    Group.findById(req.params.id)
+        .populate('suitable_rooms')
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch(err => {
+            res.status(501).json({
+                success: false,
+                message: err.message
+            });
         });
-    }).catch(err => {
-        res.status(501).json({
-            success: false,
-            message: err.message
-        });
-    });
 };
 
 const updateGroupById = (req, res) => {
@@ -90,10 +94,30 @@ const deleteGroupById = (req, res) => {
     });
 };
 
+const updateSuitableRooms = (req, res) => {
+    const { suitable_rooms } = req.body;
+
+    if (!suitable_rooms || !Array.isArray(suitable_rooms)) {
+        return res.status(400).json({
+            success: false, error: 'Invalid or missing parameters'
+        });
+    }
+
+    Group.findByIdAndUpdate(req.params.id, {
+        $set: {
+            suitable_rooms: suitable_rooms
+                .filter((value, index, self) => self.indexOf(value) === index)
+                .map(r => mongoose.Types.ObjectId(r))
+        }
+    }, { new: true }).then(result => res.status(200).json({ success: true, data: result}))
+        .catch(err => res.status(500).json({ success: false, error: err.message }));
+}
+
 module.exports = {
     createGroup,
     viewGroups,
     viewGroupById,
     updateGroupById,
-    deleteGroupById
+    deleteGroupById,
+    updateSuitableRooms
 }
