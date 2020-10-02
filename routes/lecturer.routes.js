@@ -7,4 +7,6 @@ router.get('/lecturers/:id', lecturerController.viewLecturersById);
 router.put('/lecturers/:id', lecturerController.updateLecturerById);
 router.delete('/lecturers/:id', lecturerController.deleteLecturerById);
 
+router.put('/lecturers/:id/suitable_rooms', lecturerController.updateSuitableRooms);
+
 module.exports = router;

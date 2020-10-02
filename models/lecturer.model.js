@@ -10,7 +10,11 @@ const lecturerSchema = new mongoose.Schema({
     department: { type: String, required: true },
     center: { type: String, required: true },
     building: { type: String, required: true },
-    level: { type: String, required: true }
+    level: { type: String, required: true },
+
+    suitable_rooms: [
+        { type: mongoose.Schema.Types.ObjectId, ref: 'Room' }
+    ]
 
 });
 
