@@ -166,7 +166,7 @@ const updateSuitableRooms = (req, res) => {
       });
   }
 
-  SubGroup.findByIdAndUpdate(req.params.id, {
+  Session.findByIdAndUpdate(req.params.id, {
       $set: {
           suitable_rooms: suitable_rooms
               .filter((value, index, self) => self.indexOf(value) === index)
