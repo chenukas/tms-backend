@@ -192,6 +192,31 @@ const updateTags = async (req, res) => {
     }
 }
 
+const addUnavailableTime = (req, res) => {
+
+    const { from, to } = req.body;
+
+    if (!from || !to || typeof from !== 'string' || typeof to !== 'string') {
+        return res.status(400).json({
+            success: false, error: 'Invalid or missing parameters'
+        });
+    }
+
+    Room.findByIdAndUpdate(req.params.id, {
+        $push: {
+            unavailable: {
+                from, to
+            }
+        }
+    }).then(result => res.status(200).json({ success: true, data: result }))
+        .catch(err => res.status(500).json({ success: false, error: err.message }));
+
+};
+
+// const removeUnavailableTime = (req, res) => {
+//     Room.findByIdAndUpdate()
+// }
+
 module.exports = {
     addRoomToBuilding,
     getAllRooms,
@@ -199,5 +224,6 @@ module.exports = {
     viewRoom,
     updateRoom,
     deleteRoom,
-    updateTags
+    updateTags,
+    addUnavailableTime,
 };
