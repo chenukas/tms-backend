@@ -52,7 +52,10 @@ const viewSubjects = (req, res) => {
 };
 
 const viewSubjectById = (req, res) => {
-    Subject.findById(req.params.id).then(result => {
+    Subject.findById(req.params.id)
+        .populate('preferred_rooms.tag')
+        .populate('preferred_rooms.room')
+        .then(result => {
         res.status(200).json({
             success: true,
             data: result
