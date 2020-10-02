@@ -54,8 +54,6 @@ const createTimeSlot = (req, res) => {
 
 const viewTimeSlotsByTimeID = (req, res) => {
 
-  console.log("hii");
-
     if(!req.body.timeTableID) {
       return res.status(400).json({
         success: false,
