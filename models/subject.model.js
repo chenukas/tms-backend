@@ -11,7 +11,14 @@ const subjectSchema = new mongoose.Schema ({
     labhours: { type: Number, required: true },
     evahours: { type: Number },
     parallel: { type: Boolean, default: false},
-    noolapping: { type: Boolean, default: false}
+    noolapping: { type: Boolean, default: false},
+
+    preferred_rooms: [
+        {
+            tag: { type: mongoose.Schema.Types.ObjectId, ref: 'tag' },
+            room: { type: mongoose.Schema.Types.ObjectId, ref: 'Room' }
+        }
+    ],
 
 });
 

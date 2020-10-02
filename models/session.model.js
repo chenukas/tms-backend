@@ -8,6 +8,11 @@ const sessionSchema = new mongoose.Schema({
   selectedGroup: { type: Schema.Types.ObjectId, ref: "batch" },
   studentCount: { type: String },
   duration: { type: String },
+
+  suitable_rooms: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Room' }
+  ]
+
 }, {timestamps: true});
 
 module.exports = mongoose.model("session", sessionSchema);
