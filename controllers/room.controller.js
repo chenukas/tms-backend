@@ -208,14 +208,21 @@ const addUnavailableTime = (req, res) => {
                 from, to
             }
         }
-    }).then(result => res.status(200).json({ success: true, data: result }))
+    }, { new: true }).then(result => res.status(200).json({ success: true, data: result }))
         .catch(err => res.status(500).json({ success: false, error: err.message }));
 
 };
 
-// const removeUnavailableTime = (req, res) => {
-//     Room.findByIdAndUpdate()
-// }
+const removeUnavailableTime = (req, res) => {
+    Room.findByIdAndUpdate(req.params.roomId, {
+        $pull: {
+            unavailable: {
+                _id: req.params.id
+            }
+        }
+    }, { new: true, safe: true }).then(result => res.status(200).json({ success: true, data: result }))
+        .catch(err => res.status(500).json({ success: false, error: err.message }));
+}
 
 module.exports = {
     addRoomToBuilding,
@@ -226,4 +233,5 @@ module.exports = {
     deleteRoom,
     updateTags,
     addUnavailableTime,
+    removeUnavailableTime
 };
