@@ -25,7 +25,9 @@ const createSubGroup = (req, res) => {
 };
 
 const viewSubGroups = (req, res) => {
-    SubGroup.find({}).then(result => {
+    SubGroup.find({})
+        .populate('suitable_rooms')
+        .then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -39,7 +41,9 @@ const viewSubGroups = (req, res) => {
 };
 
 const viewSubGroupById = (req, res) => {
-    SubGroup.findById(req.params.id).then(result => {
+    SubGroup.findById(req.params.id)
+        .populate('suitable_rooms')
+        .then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -90,10 +94,30 @@ const deleteSubGroupById = (req, res) => {
     });
 };
 
+const updateSuitableRooms = (req, res) => {
+    const { suitable_rooms } = req.body;
+
+    if (!suitable_rooms || !Array.isArray(suitable_rooms)) {
+        return res.status(400).json({
+            success: false, error: 'Invalid or missing parameters'
+        });
+    }
+
+    SubGroup.findByIdAndUpdate(req.params.id, {
+        $set: {
+            suitable_rooms: suitable_rooms
+                .filter((value, index, self) => self.indexOf(value) === index)
+                .map(r => mongoose.Types.ObjectId(r))
+        }
+    }, { new: true }).then(result => res.status(200).json({ success: true, data: result}))
+        .catch(err => res.status(500).json({ success: false, error: err.message }));
+}
+
 module.exports = {
     createSubGroup,
     viewSubGroups,
     viewSubGroupById,
     updateSubGroupById,
-    deleteSubGroupById
+    deleteSubGroupById,
+    updateSuitableRooms
 }

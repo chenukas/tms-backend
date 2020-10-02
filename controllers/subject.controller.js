@@ -1,4 +1,6 @@
 const Subject = require('../models/subject.model');
+const subjectModel = require('../models/subject.model');
+const mongoose = require('mongoose');
 
 const addSubject = (req, res) => {
 
@@ -33,7 +35,10 @@ const addSubject = (req, res) => {
 };
 
 const viewSubjects = (req, res) => {
-    Subject.find({}).then(result => {
+    Subject.find({})
+        .populate('preferred_rooms.tag')
+        .populate('preferred_rooms.room')
+        .then(result => {
         res.status(200).json({
             success: true,
             data: result
@@ -173,6 +178,44 @@ const updateSubjectNoolappingById = (req, res) => {
     });
 }
 
+const updatePreferredRooms = async (req, res) => {
+
+    const { preferred_rooms } = req.body;
+
+    if (!preferred_rooms) {
+        return res.status(400).json({
+            success: false, error: 'Parameter \'preferred_rooms\' is required.'
+        });
+    }
+
+    if(!Array.isArray(preferred_rooms)) {
+        return res.status(400).json({
+            success: false, error: 'Invalid arameter \'preferred_rooms\'. [] is required.'
+        });
+    }
+
+    try {
+        const result = await subjectModel.findOneAndUpdate({ _id: req.params.id }, {
+            $set: {
+                preferred_rooms: preferred_rooms
+                    .filter((value, index, self) => self.indexOf(value) === index)
+                    .map(p => { return { 
+                        tag: mongoose.Types.ObjectId(p.tag),
+                        room: mongoose.Types.ObjectId(p.room)
+                    }})
+            }
+        }, { new: true });
+
+        return res.status(200).json({
+            success: true, data: result
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false, error: err.message
+        })
+    }
+}
+
 module.exports = {
     addSubject,
     viewSubjects,
@@ -182,6 +225,6 @@ module.exports = {
     updateSubjectParallelById,
     viewCanOverlappingSubjects,
     viewNonParallelSubjects,
-    updateSubjectNoolappingById
-
+    updateSubjectNoolappingById,
+    updatePreferredRooms
 }

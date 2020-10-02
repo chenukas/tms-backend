@@ -10,5 +10,6 @@ router.put('/subjects/:id/parallel', subjectController.updateSubjectParallelById
 router.get('/olsubjects', subjectController.viewCanOverlappingSubjects);
 router.put('/subjects/:id/noolapping', subjectController.updateSubjectNoolappingById);
 router.get('/npsubjects', subjectController.viewNonParallelSubjects);
+router.put('/subjects/:id/preferred_rooms', subjectController.updatePreferredRooms);
 
 module.exports = router;
