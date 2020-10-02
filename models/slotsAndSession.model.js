@@ -24,10 +24,6 @@ const slotsAndSessionSchema = new mongoose.Schema({
     classRoom: {
       type: String,
         required: true
-    },
-    timeSlots: {
-      type: String,
-      required: true
     }
   });
 
