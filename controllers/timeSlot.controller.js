@@ -74,18 +74,25 @@ const viewTimeSlotsByTimeID = (req, res) => {
             message: 'Error: Server error'
         });
       }
-      
-      timeSlot = timeSlots[0];
-      
-      TimeSlots.findById(timeSlot._id).then(result => {
-        res.status(200).json({
-            success: true,
-            data: result,
-            message: "Searching ID is found."
+      if(timeSlots.length == 0){
+        return res.send({
+          success: false,
+          data: timeTableID,
+          message: 'Timetable ID has not time slots'
+      });
+      }
+      else{
+        timeSlot = timeSlots[0];
+        console.log(timeSlot._id)
+        TimeSlots.findById(timeSlot._id).then(result => {
+          res.status(200).json({
+              success: true,
+              data: result,
+              message: "Searching ID is found."
+          })
         });
-      })
-    });
-    
+      }
+    });  
   };
 
 module.exports = {
